@@ -54,13 +54,37 @@ WSGI_APPLICATION = 'toodo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+    # Running on production App Engine, so use a Google Cloud SQL database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': '/cloudsql/wide-exchanger-382:red',
+            'NAME': 'toodo',
+            'USER': 'root',
+        }
     }
-}
+elif os.getenv('SETTINGS_MODE') == 'prod':
+    # Running in development, but want to access the Google Cloud SQL instance
+    # in production.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'google.appengine.ext.django.backends.rdbms',
+            'INSTANCE': 'wide-exchanger-382:red',
+            'NAME': 'toodo',
+            'USER': 'root',
+        }
+    }
+else:
+    # Running in development, so use a local MySQL database.
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'toodo',
+            'USER': 'root',
+            'PASSWORD': 'root',
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
