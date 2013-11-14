@@ -29,7 +29,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'core',
+
     'rest_framework',
+    'oauth2_provider',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -96,3 +98,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = 'static'
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
