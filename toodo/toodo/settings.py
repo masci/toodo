@@ -2,10 +2,13 @@
 Django settings for toodo project.
 
 """
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+PRODUCTION = os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+if PRODUCTION:
+    import sys
+    sys.path.append(os.path.join(BASE_DIR, '..', 'lib'))
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
