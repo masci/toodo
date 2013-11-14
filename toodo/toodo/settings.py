@@ -6,10 +6,6 @@ import os
 PRODUCTION = os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine')
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
-if PRODUCTION:
-    import sys
-    sys.path.append(os.path.join(BASE_DIR, '..', 'lib'))
-
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '#%p4s@1(+!0&)^=sl91!j^#x_^98)+(acf)5#pblu$u4s2g+_='
@@ -51,8 +47,7 @@ WSGI_APPLICATION = 'toodo.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
+if PRODUCTION:
     # Running on production App Engine, so use a Google Cloud SQL database.
     DATABASES = {
         'default': {
